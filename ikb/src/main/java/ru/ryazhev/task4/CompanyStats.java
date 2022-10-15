@@ -33,7 +33,7 @@ public class CompanyStats {
     public AtomicInteger nameStat(String name){
         AtomicInteger count = new AtomicInteger();
         rows.stream()
-                .filter(p -> p[columns.get("surname")].equals(name))
+                .filter(p -> p[columns.get("name")].equals(name))
                 .forEach(p -> count.getAndIncrement());
         return count;
     }
