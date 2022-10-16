@@ -2,10 +2,22 @@ package ru.ryazhev.task1;
 
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Stuff {
-    public Stuff(){};
+
+    private UUID id;
+    private String surname;
+    private String name;
+    private String patronymic;
+    private boolean sex;
+    private LocalDate birthDate;
+    private Double salaryMultiplier;
+    private Position position;
+
+    public Stuff(){
+    }
 
     public Stuff(UUID id,
                  String surname,
@@ -24,15 +36,6 @@ public class Stuff {
         this.salaryMultiplier = salaryMultiplier;
         this.position = position;
     }
-
-    private UUID id;
-    private String surname;
-    private String name;
-    private String patronymic;
-    private boolean sex;
-    private LocalDate birthDate;
-    private Double salaryMultiplier;
-    private Position position;
 
     public UUID getId() {
         return id;
@@ -96,5 +99,36 @@ public class Stuff {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Stuff stuff = (Stuff)o;
+
+        if (sex != stuff.sex) return false;
+        if (!Objects.equals(id, stuff.id)) return false;
+        if (!Objects.equals(surname, stuff.surname)) return false;
+        if (!Objects.equals(name, stuff.name)) return false;
+        if (!Objects.equals(patronymic, stuff.patronymic)) return false;
+        if (!Objects.equals(birthDate, stuff.birthDate)) return false;
+        if (!Objects.equals(salaryMultiplier, stuff.salaryMultiplier))
+            return false;
+        return Objects.equals(position, stuff.position);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (surname != null ? surname.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (patronymic != null ? patronymic.hashCode() : 0);
+        result = 31 * result + (sex ? 1 : 0);
+        result = 31 * result + (birthDate != null ? birthDate.hashCode() : 0);
+        result = 31 * result + (salaryMultiplier != null ? salaryMultiplier.hashCode() : 0);
+        result = 31 * result + (position != null ? position.hashCode() : 0);
+        return result;
     }
 }

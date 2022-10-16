@@ -4,24 +4,26 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 
-import javax.xml.namespace.QName;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class CompanyStats {
-    private List<String[]> rows;
-    private HashMap<String, Integer> columns;
+    public static final String CSV_NAME_COLUMN = "name";
+    public static final String CSV_SURNAME_COLUMN = "surname";
+    public static final String CSV_BIRTH_DATE_COLUMN = "birthDate";
+    public static final String CSV_SEX_COLUMN = "sex";
+    public static final String CSV_SALARY_COLUMN = "salary";
+
+    private final List<String[]> rows;
+    private final HashMap<String, Integer> columns;
 
     public CompanyStats(String file){
         try(CSVReader reader = new CSVReaderBuilder
-                (new FileReader(file)).build()){
+                (new FileReader(CompanyStats.class.getResource(file).getFile())).build()){
             String[] cols = reader.readNext();
-            columns = new HashMap<>(Collections.emptyMap());
+            columns = new HashMap<>();
             for(int i = 0; i < cols.length; i++){
                 columns.put(cols[i], i);
             }
@@ -30,48 +32,36 @@ public class CompanyStats {
             throw new RuntimeException(e);
         }
     }
-    public AtomicInteger nameStat(String name){
-        AtomicInteger count = new AtomicInteger();
-        rows.stream()
-                .filter(p -> p[columns.get("name")].equals(name))
-                .forEach(p -> count.getAndIncrement());
-        return count;
+    public int nameStat(String name){
+        return (int)rows.stream()
+                .filter(p -> p[columns.get(CSV_NAME_COLUMN)].equals(name))
+                .count();
     }
-    public AtomicInteger surnameStat(String surname){
-        AtomicInteger count = new AtomicInteger();
-        rows.stream()
-                .filter(p -> p[columns.get("surname")].equals(surname))
-                .forEach(p -> count.getAndIncrement());
-        return count;
+    public int surnameStat(String surname){
+        return (int)rows.stream()
+                .filter(p -> p[columns.get(CSV_SURNAME_COLUMN)].equals(surname))
+                .count();
     }
-    public  AtomicInteger birthMonthStat(int month){
-        AtomicInteger count = new AtomicInteger();
-        rows.stream()
-                .filter(p -> Integer.parseInt(p[columns.get("birthDate")].split("-")[1]) == month)
-                .forEach(p -> count.getAndIncrement());
-        return count;
+    public  int birthMonthStat(int month){
+        return (int)rows.stream()
+                .filter(p -> Integer.parseInt(p[columns.get(CSV_BIRTH_DATE_COLUMN)].split("-")[1]) == month)
+                .count();
     }
-    public AtomicInteger sexStat(boolean sex){
-        AtomicInteger count = new AtomicInteger();
-        rows.stream()
-                .filter(p -> p[columns.get("sex")].equals(String.valueOf(sex)))
-                .forEach(p -> count.getAndIncrement());
-        return count;
+    public int sexStat(boolean sex){
+        return (int)rows.stream()
+                .filter(p -> p[columns.get(CSV_SEX_COLUMN)].equals(String.valueOf(sex)))
+                .count();
     }
-    public AtomicInteger salaryStat(int lowerBound){
-        AtomicInteger count = new AtomicInteger();
-        rows.stream()
-                .filter(p -> Integer.parseInt(p[columns.get("salary")]) >= lowerBound)
-                .forEach(p -> count.getAndIncrement());
-        return count;
+    public int salaryStat(int lowerBound){
+        return (int)rows.stream()
+                .filter(p -> Integer.parseInt(p[columns.get(CSV_SALARY_COLUMN)]) >= lowerBound)
+                .count();
     }
-    public AtomicInteger salaryStat(int lowerBound, int higherBound){
-        AtomicInteger count = new AtomicInteger();
-        rows.stream()
-                .filter(p -> Integer.parseInt(p[columns.get("salary")]) >= lowerBound &&
-                        Integer.parseInt(p[columns.get("salary")]) <= higherBound)
-                .forEach(p -> count.getAndIncrement());
-        return count;
+    public int salaryStat(int lowerBound, int higherBound){
+        return (int)rows.stream()
+                .filter(p -> Integer.parseInt(p[columns.get(CSV_SALARY_COLUMN)]) >= lowerBound &&
+                        Integer.parseInt(p[columns.get(CSV_SALARY_COLUMN)]) <= higherBound)
+                .count();
     }
 
 

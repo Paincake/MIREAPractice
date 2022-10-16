@@ -4,6 +4,11 @@ package ru.ryazhev.task1;
 import java.util.UUID;
 
 public class Position {
+
+    private UUID id;
+    private String name;
+    private Integer salary;
+
     public Position() {
     }
 
@@ -12,10 +17,6 @@ public class Position {
         this.name = name;
         this.salary = salary;
     }
-
-    private UUID id;
-    private String name;
-    private Integer salary;
 
     public UUID getId() {
         return id;

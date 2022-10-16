@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import ru.ryazhev.task1.Client;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -14,6 +16,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class InfoWriter {
+
+    private static final String INCORRECT_TEXT_CHARACTERS = "`~!@$%^&*-_=+().//\\;:?,][1234567890";
+    private static final String INCORRECT_NUMBER_CHARACTERS = "`~!@$%^&*-_=+().//\\;:?,][qwertyuiopasdfghjklzxcvbnm";
+    public static final int YEAR_INDEX = 0;
+    public static final int MONTH_INDEX = 1;
+    public static final int DAY_OF_MONTH_INDEX = 2;
+
     private static boolean checkTextInfo(String text, String dict){
         if(text.isEmpty()) return true;
         for(int i = 0; i < text.length(); i++){
@@ -21,81 +30,81 @@ public class InfoWriter {
         }
         return false;
     }
-    public static void clientInfo(Client person){
+
+    public static void clientInfo(Client person) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Scanner in = new Scanner(System.in);
 
-        String incorrect_text = "`~!@$%^&*-_=+().//\\;:?,][1234567890";
-        String incorrect_number = "`~!@$%^&*-_=+().//\\;:?,][qwertyuiopasdfghjklzxcvbnm";
         System.out.print("Name > ");
-        String name = in.nextLine();
-        while(checkTextInfo(name, incorrect_text)){
+        String name;
+        do {
             System.out.println("Error: incorrect format, please try again");
-            name = in.nextLine();
-        }
+            name = reader.readLine();
+        } while(checkTextInfo(name, INCORRECT_TEXT_CHARACTERS));
         System.out.print("Surname > ");
-        String surname = in.nextLine();
-        while(checkTextInfo(surname, incorrect_text)){
+        String surname;
+        do{
             System.out.println("Error: incorrect format, please try again");
-            surname = in.nextLine();
-        }
+            surname = reader.readLine();
+        }while(checkTextInfo(surname, INCORRECT_TEXT_CHARACTERS));
         System.out.print("Patronymic > ");
-        String patronymic = in.nextLine();
-        while(checkTextInfo(patronymic, incorrect_text)){
+        String patronymic ;
+       do{
             System.out.println("Error: incorrect format, please try again");
-            patronymic = in.nextLine();
-        }
+            patronymic = reader.readLine();
+        } while(checkTextInfo(patronymic, INCORRECT_TEXT_CHARACTERS));
         System.out.print("Sex (M/F) > ");
-        String sex = in.nextLine();
-        while(checkTextInfo(sex, incorrect_text) || (!sex.equals("F") && !sex.equals("M"))){
+        String sex;
+        do{
             System.out.println("Error: incorrect format, please try again");
-            sex = in.nextLine();
-        }
+            sex = reader.readLine();
+        }while(checkTextInfo(sex, INCORRECT_TEXT_CHARACTERS) || (!sex.equalsIgnoreCase("F") && !sex.equalsIgnoreCase("M")));
         System.out.print("Phone number > ");
-        String num = in.nextLine();
-        while(checkTextInfo(num, incorrect_number)){
+        String num;
+        do{
             System.out.println("Error: incorrect format, please try again");
-            num = in.nextLine();
-        }
+            num = reader.readLine();
+        }while(checkTextInfo(num, INCORRECT_NUMBER_CHARACTERS));
         System.out.print("INN > ");
-        String inn = in.nextLine();
-        while(inn.length() != 12 || checkTextInfo(inn, incorrect_number)){
+        String inn;
+        do{
             System.out.println("Error: incorrect format, please try again");
-            inn = in.nextLine();
-        }
+            inn = reader.readLine();
+        }while(inn.length() != 12 || checkTextInfo(inn, INCORRECT_NUMBER_CHARACTERS));
         System.out.print("Passport series: ");
-        String pass = in.nextLine();
-        while(pass.length() != 4 || checkTextInfo(pass, incorrect_number)){
+        String pass;
+        do{
             System.out.println("Error: incorrect format, please try again");
-            pass = in.nextLine();
-        }
+            pass = reader.readLine();
+        }while(pass.length() != 4 || checkTextInfo(pass, INCORRECT_NUMBER_CHARACTERS));
         System.out.print("Birth date <yyyy-MM-dd>: ");
         in.useDelimiter("-");
         List<String> dates;
         while(true){
-            String date = in.nextLine();
+            String date = reader.readLine();
             dates = Arrays.asList(date.split("-"));
             if(dates.size() < 3){
                 System.out.println("Error: incorrect format, please try again");
                 continue;
             }
             if(
-                    dates.get(0).length() > 4
-                            || checkTextInfo(dates.get(0), incorrect_number)
-                            || Integer.parseInt(dates.get(0)) < 1950){
+                    dates.get(YEAR_INDEX).length() > 4
+                            || checkTextInfo(dates.get(YEAR_INDEX), INCORRECT_NUMBER_CHARACTERS)
+                            || Integer.parseInt(dates.get(YEAR_INDEX)) < 1950){
                 System.out.println("Error: incorrect year, please try again");
                 continue;
             }
             if(
-                    dates.get(1).length() > 2
-                            || checkTextInfo(dates.get(1), incorrect_number)
-                            || Integer.parseInt(dates.get(1)) > 12){
+                    dates.get(MONTH_INDEX).length() > 2
+                            || checkTextInfo(dates.get(MONTH_INDEX), INCORRECT_NUMBER_CHARACTERS)
+                            || Integer.parseInt(dates.get(MONTH_INDEX)) > 12){
                 System.out.println("Error: incorrect month, please try again");
                 continue;
             }
             if(
-                    dates.get(2).length() > 2
-                            || checkTextInfo(dates.get(2), incorrect_number)
-                            || Integer.parseInt(dates.get(2)) > 31){
+                    dates.get(DAY_OF_MONTH_INDEX).length() > 2
+                            || checkTextInfo(dates.get(DAY_OF_MONTH_INDEX), INCORRECT_NUMBER_CHARACTERS)
+                            || Integer.parseInt(dates.get(DAY_OF_MONTH_INDEX)) > 31){
                 System.out.println("Error: incorrect day, please try again");
                 continue;
             }
@@ -107,18 +116,18 @@ public class InfoWriter {
         person.setInn(inn);
         person.setPhone(num);
         LocalDate birth = LocalDate.of(
-                Integer.parseInt(dates.get(0)),
-                Integer.parseInt(dates.get(1)),
-                Integer.parseInt(dates.get(2)));
+                Integer.parseInt(dates.get(YEAR_INDEX)),
+                Integer.parseInt(dates.get(MONTH_INDEX)),
+                Integer.parseInt(dates.get(DAY_OF_MONTH_INDEX)));
+        person.setBirthDate(birth);
         person.setPassportSerial(pass);
         person.setSex(sex.equals("F"));
     }
+
     public static void writeJSON(String file, Client info){
-        try{
-            BufferedWriter writer = Files.newBufferedWriter(Paths.get(file));
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(file))){
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             writer.write(gson.toJson(info));
-            writer.close();
         }catch (IOException exc){
             System.out.println("Exception");
         }
