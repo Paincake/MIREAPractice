@@ -4,7 +4,18 @@ import java.util.UUID;
 
 public class Client {
 
-    public Client(){};
+    private UUID id;
+    private String surname;
+    private String name;
+    private String patronymic;
+    private boolean sex;
+    private LocalDate birthDate;
+    private String inn;
+    private String passportSerial;
+    private String phone;
+
+    public Client(){
+    }
 
     public Client(UUID id,
                   String surname,
@@ -25,16 +36,6 @@ public class Client {
         this.passportSerial = passportSerial;
         this.phone = phone;
     }
-
-    private UUID id;
-    private String surname;
-    private String name;
-    private String patronymic;
-    private boolean sex;
-    private LocalDate birthDate;
-    private String inn;
-    private String passportSerial;
-    private String phone;
 
     public UUID getId() {
         return id;

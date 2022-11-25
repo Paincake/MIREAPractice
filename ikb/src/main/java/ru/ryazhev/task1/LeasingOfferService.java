@@ -12,13 +12,12 @@ public class LeasingOfferService implements OfferService{
                               LocalDateTime endingDate,
                               Client client,
                               Stuff stuff) {
-        Offer offer = null;
         String number = Integer.toString(
                 startDate.getNano()) +
-                Integer.toString(endingDate.getNano()) +
-                Integer.parseInt(startDate.getMonth().toString()) +
-                Integer.toString(endingDate.getDayOfMonth());
-        offer = new Offer(UUID.randomUUID(), number, LocalDateTime.now(), endingDate, startDate,
+                endingDate.getNano() +
+                startDate.getMonth().ordinal() +
+                endingDate.getDayOfMonth();
+        Offer offer = new Offer(UUID.randomUUID(), number, LocalDateTime.now(), endingDate, startDate,
                 office, client, stuff);
 
         StatCounter.getInstance().addOffer(offer);
@@ -30,8 +29,10 @@ public class LeasingOfferService implements OfferService{
             "9425 Vince Groves",
             "Suite 130, 94073-7811, Port Gabrielmouth, New York, United States",
             10);
+
     private LeasingOfferService() {
     }
+
     public static LeasingOfferService getInstance(){
         if(instance == null){
             instance = new LeasingOfferService();

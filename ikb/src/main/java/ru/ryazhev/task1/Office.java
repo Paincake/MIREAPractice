@@ -3,7 +3,14 @@ package ru.ryazhev.task1;
 import java.util.UUID;
 
 public class Office {
-    public Office(){};
+
+    private UUID id;
+    private String address;
+    private String lawAddress;
+    private Integer cabinetsCount;
+
+    public Office(){
+    }
 
     public Office(UUID id, String address, String lawAddress, Integer cabinetsCount) {
         this.id = id;
@@ -11,11 +18,6 @@ public class Office {
         this.lawAddress = lawAddress;
         this.cabinetsCount = cabinetsCount;
     }
-
-    private UUID id;
-    private String address;
-    private String lawAddress;
-    private Integer cabinetsCount;
 
     public UUID getId() {
         return id;

@@ -3,7 +3,18 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Offer {
-    public Offer() {}
+
+    private UUID id;
+    private String serialNumber;
+    private LocalDateTime signDate;
+    private LocalDateTime endingDate;
+    private LocalDateTime startingDate;
+    private Office offerOffice;
+    private Client offerClient;
+    private Stuff offerStuff;
+
+    public Offer() {
+    }
 
     public Offer(UUID id,
                  String serialNumber,
@@ -22,15 +33,6 @@ public class Offer {
         this.offerClient = offerClient;
         this.offerStuff = offerStuff;
     }
-
-    private UUID id;
-    private String serialNumber;
-    private LocalDateTime signDate;
-    private LocalDateTime endingDate;
-    private LocalDateTime startingDate;
-    private Office offerOffice;
-    private Client offerClient;
-    private Stuff offerStuff;
 
     public Office getOfferOffice() {
         return offerOffice;
